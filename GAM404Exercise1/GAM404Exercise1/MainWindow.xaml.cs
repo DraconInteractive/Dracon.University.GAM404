@@ -24,7 +24,7 @@ namespace GAM404Exercise1
         public string username, description;
         public int level;
         public float experiencePercent;
-
+        public string testString = "red";
         public MainWindow()
         {
             InitializeComponent();

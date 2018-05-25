@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Content="{Binding Path=character.username}"/>
+        <Label Content="{Binding Path=testString}"/>
         <Label Content="{Binding Path=character.level}" Grid.Row="1"/>
         <Label Content="{Binding Path=character.experiencePercent}" Grid.Row="2"/>
         <Label Content="{Binding Path=character.description}" Grid.Row="3"/>

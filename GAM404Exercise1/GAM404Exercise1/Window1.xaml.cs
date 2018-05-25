@@ -19,7 +19,8 @@ namespace GAM404Exercise1
     /// </summary>
     public partial class Window1 : Window
     {
-        Character character;
+        public Character character;
+        public string testString = "blue";
         public Window1()
         {
             InitializeComponent();
