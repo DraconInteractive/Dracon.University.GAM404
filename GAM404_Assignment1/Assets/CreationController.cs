@@ -10,7 +10,7 @@ public class CreationController : MonoBehaviour {
     public InputField usernameInput, levelInput;
     public Dropdown classInput;
 
-    public Text finalUsername, finalLevel, finalClass;
+    public Text finalUsername, finalLevel, finalExperience, finalClass;
 
     public List<Character> createdCharacters = new List<Character>();
 	// Use this for initialization
@@ -50,7 +50,9 @@ public class CreationController : MonoBehaviour {
         {
             Username = u,
             Level = l,
-            Class = c
+            Class = c,
+            currentXP = 0,
+            targetXP = l * 123
         };
 
         createdCharacters.Add(newCharacter);
@@ -58,6 +60,7 @@ public class CreationController : MonoBehaviour {
         finalUsername.text = u;
         finalLevel.text = l.ToString();
         finalClass.text = c.ToString();
+        finalExperience.text = newCharacter.currentXP + "/" + newCharacter.targetXP;
     }
 }
 
@@ -66,6 +69,7 @@ public class Character
 {
     public string Username;
     public int Level;
+    public int currentXP, targetXP;
     public enum Type
     {
         Knight, 
@@ -73,4 +77,26 @@ public class Character
         Mage
     };
     public Type Class;
+
+    public Character ()
+    {
+
+    }
+
+    public Character (int random)
+    {
+        string[] usernames = new string[]
+        {
+            "Gorok",
+            "Ushnark",
+            "Argie",
+            "Gordon"
+        };
+
+        Username = usernames[Random.Range(0, usernames.Length)];
+        Level = Random.Range(0, 10);
+        currentXP = Random.Range(0, 1000);
+        targetXP = Random.Range(currentXP, 10000);
+        Class = Type.Knight;
+    }
 }
