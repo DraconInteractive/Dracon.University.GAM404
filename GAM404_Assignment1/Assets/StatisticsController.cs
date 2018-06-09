@@ -6,7 +6,7 @@ namespace Week3
 {
     public class StatisticsController : MonoBehaviour
     {
-        public int levelConstant, balanceModifier;
+        public int levelConstant, membersToBalance, balanceModifier;
         public List<Character> allCharacters = new List<Character>();
         public List<Character> teamOne = new List<Character>();
         public List<Character> teamTwo = new List<Character>();
@@ -69,10 +69,14 @@ namespace Week3
 
         public void BalanceTeams ()
         {
-            foreach (Character c in teamTwo)
+            for (int i = 0; i < membersToBalance; i++)
             {
-                c.Recalculate(balanceModifier);
+                teamTwo[i].Recalculate(balanceModifier);
             }
+            //foreach (Character c in teamTwo)
+            //{
+                //c.Recalculate(balanceModifier);
+            //}
         }
 
         public void CompleteBattleRound()
@@ -84,6 +88,7 @@ namespace Week3
                 if (teamTwo.Count > 0)
                 {
                     Character target = GetTarget(teamTwo, c);
+                    
                     roundResults.Add(DamageTarget(target, c, teamTwo));
                 }
                 else
@@ -124,11 +129,11 @@ namespace Week3
                 result += "\n";
             }
             result += "\n " + win;
-            print(result);
+            //print(result);
         }
 
         [ContextMenu("Do Battle")]
-        public void DoBattle ()
+        public void DoBattle()
         {
             int roundCounter = 0;
             while (teamOne.Count > 0 && teamTwo.Count > 0)
@@ -136,20 +141,40 @@ namespace Week3
                 CompleteBattleRound();
                 roundCounter++;
             }
-            print("Rounds to win: " + roundCounter);
+            string w = "";
+            if (teamOne.Count <= 0)
+            {
+                w = "Team Two Wins";
+            }
+            else if (teamTwo.Count <= 0)
+            {
+                w = "Team One Wins";
+            }
+            print("Rounds to win: " + roundCounter + " " + w);
         }
-        //Modify targets not teamTwo... duh XD
+
+        [ContextMenu("Do Tournament")]
+        public void DoTournament ()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                PopulateRoster();
+                AssignTeams();
+                BalanceTeams();
+                DoBattle();
+            }
+        }
         public Character GetTarget(List<Character> targets, Character c)
         {
             Character target = null;
             switch (c.attackType)
             {
                 case Character.AttackType.Random:
-                    target = teamTwo[Random.Range(0, teamTwo.Count - 1)];
+                    target = targets[Random.Range(0, targets.Count - 1)];
                     break;
                 case Character.AttackType.LowestHealth:
                     float bigHealth = Mathf.Infinity;
-                    foreach (Character ch in teamTwo)
+                    foreach (Character ch in targets)
                     {
                         if (ch.statistics.health < bigHealth)
                         {
@@ -160,7 +185,7 @@ namespace Week3
                     break;
                 case Character.AttackType.HighestHealth:
                     float lowHealth = -Mathf.Infinity;
-                    foreach (Character ch in teamTwo)
+                    foreach (Character ch in targets)
                     {
                         if (ch.statistics.health > lowHealth)
                         {
@@ -171,7 +196,7 @@ namespace Week3
                     break;
                 case Character.AttackType.LowestDP:
                     float bigDP = Mathf.Infinity;
-                    foreach (Character ch in teamTwo)
+                    foreach (Character ch in targets)
                     {
                         if (ch.statistics.damage < bigDP)
                         {
@@ -182,7 +207,7 @@ namespace Week3
                     break;
                 case Character.AttackType.HighestDP:
                     float lowDP = -Mathf.Infinity;
-                    foreach (Character ch in teamTwo)
+                    foreach (Character ch in targets)
                     {
                         if (ch.statistics.damage > lowDP)
                         {
