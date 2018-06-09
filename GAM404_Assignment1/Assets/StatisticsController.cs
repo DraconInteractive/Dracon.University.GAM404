@@ -15,12 +15,15 @@ namespace Week3
         // Use this for initialization
         void Start()
         {
+            balanceModifier = (int)(levelConstant * 0.15f);
+            membersToBalance = 1 + (int)(levelConstant * 0.025f);
             PopulateRoster();
             AssignTeams();
             BalanceTeams();
             if (fightOnStart)
             {
-                DoBattle();
+                //DoBattle();
+                DoTournament();
             }
             
         }
@@ -225,7 +228,7 @@ namespace Week3
             bool killingBlow = false;
             int dmg = origin.statistics.damage;
 
-            float rnd = Random.Range(0, 100);
+            float rnd = Random.Range(0, origin.statistics.level);
             if (rnd < (origin.statistics.hitChance - target.statistics.dodgeChance))
             {
                 target.statistics.health -= origin.statistics.damage;

@@ -271,10 +271,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8027bea5a87b7c0409f9dbe5faf60b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelConstant: 10
+  levelConstant: 100
   membersToBalance: 1
   balanceModifier: 1
   allCharacters: []
   teamOne: []
   teamTwo: []
-  fightOnStart: 1
+  fightOnStart: 0
