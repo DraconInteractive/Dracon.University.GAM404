@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Week3
+namespace Final
 {
     public class StatisticsController : MonoBehaviour
     {
