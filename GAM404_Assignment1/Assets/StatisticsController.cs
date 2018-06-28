@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Final
 {
@@ -12,6 +13,10 @@ namespace Final
         public List<Character> teamTwo = new List<Character>();
 
         public bool fightOnStart;
+
+        [Header("UI")]
+        public CharacterSlotUI[] characterSlots;
+
         // Use this for initialization
         void Start()
         {
@@ -37,12 +42,20 @@ namespace Final
         public void PopulateRoster()
         {
             allCharacters.Clear();
-            for (int i = 0; i < 15; i++)
+            for (int i = 1; i < 16; i++)
             {
                 allCharacters.Add(new Character(levelConstant)
                 {
                     ID = i
                 });
+            }
+
+            if (allCharacters.Count > 0 && characterSlots.Length > 0)
+            {
+                for (int i = 0; i < allCharacters.Count; i++)
+                {
+                    characterSlots[i].AssignCharacter(allCharacters[i]);
+                }
             }
         }
 
