@@ -6,9 +6,9 @@ using UnityEngine.EventSystems;
 
 namespace Final
 {
-    public class CharacterSlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class CharacterSlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
-
+        Character myCharacter = null;
         public Image myImage;
         public Text myText;
 
@@ -19,6 +19,8 @@ namespace Final
 
         public Sprite dragSprite;
         public bool dragOnSurfaces;
+
+        public GameObject descPanelPrefab;
         private void Awake()
         {
             myImage = GetComponent<Image>();
@@ -39,6 +41,7 @@ namespace Final
         public void AssignCharacter(Character c)
         {
             myText.text = "Character: " + c.ID.ToString();
+            myCharacter = c;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -92,7 +95,38 @@ namespace Final
             if (meDrag != null)
                 Destroy(meDrag);
 
-            
+            List<RaycastResult> result = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, result);
+            TeamContainer container = null;
+            foreach (RaycastResult r in result)
+            {
+                container = r.gameObject.transform.GetComponent<TeamContainer>();
+                if (container != null)
+                {
+                    break;
+                }
+            }
+
+            if (container != null)
+            {
+                print("found container");
+                if (container.AddCharacterToTeam(myCharacter))
+                {
+                    Destroy(this.gameObject);
+                }
+                
+            }
+            else
+            {
+                print("no container");
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            CharacterDescUI ui = Instantiate(descPanelPrefab, transform.parent.transform.parent.transform.parent).GetComponent<CharacterDescUI>();
+            ui.AssignCharacter(myCharacter);
+
         }
     }
 }

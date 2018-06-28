@@ -13,6 +13,8 @@ namespace Final
 
         public Text teamText;
         public List<Character> tempTeam;
+
+        public Text teamStr, teamDex, teamSta, teamAcu;
         // Use this for initialization
         void Start()
         {
@@ -50,7 +52,31 @@ namespace Final
             {
                 s += "•" + " Character " + ch.ID + "\n";
             }
+
+            s += "\n\n";
+            int str = 0;
+            int dex = 0;
+            int acu = 0;
+            int sta = 0;
+            foreach (Character ch in tempTeam)
+            {
+                str += ch.attributes.str;
+                dex += ch.attributes.dex;
+                acu += ch.attributes.acu;
+                sta += ch.attributes.sta;
+            }
+
+            s += "Totals: " + "\n\n";
+            s += "Strength: " + str.ToString() + "\n";
+            s += "Dexterity: " + dex.ToString() + "\n";
+            s += "Stamina: " + sta.ToString() + "\n";
+            s += "Acuity: " + acu.ToString() + "\n";
             teamText.text = s;
+
+            if (tempTeam.Count == 5)
+            {
+                GetComponent<Image>().color = new Color(0.3f, 0.7f, 0.3f, 0.7f);
+            }
             return true;
         }
     }

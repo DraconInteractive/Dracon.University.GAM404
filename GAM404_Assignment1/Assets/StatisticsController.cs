@@ -7,24 +7,44 @@ namespace Final
 {
     public class StatisticsController : MonoBehaviour
     {
+        public static StatisticsController controller;
         public int levelConstant, membersToBalance, balanceModifier;
         public List<Character> allCharacters = new List<Character>();
         public List<Character> teamOne = new List<Character>();
         public List<Character> teamTwo = new List<Character>();
 
+        public enum ControlType
+        {
+            Auto,
+            Manual
+        }
+
+        public ControlType controlType;
         public bool fightOnStart;
 
         [Header("UI")]
         public CharacterSlotUI[] characterSlots;
-
+        public Button completeRosterButton;
+        public GameObject stageOneCanvas, stageTwoCanvas;
+        public CharacterSlotUI[] ss_teamOne, ss_teamTwo;
+        private void Awake()
+        {
+            controller = this;
+            completeRosterButton.onClick.AddListener(() => AssignTeamsManual());
+        }
         // Use this for initialization
         void Start()
         {
             balanceModifier = (int)(levelConstant * 0.15f);
             membersToBalance = 1 + (int)(levelConstant * 0.025f);
             PopulateRoster();
-            AssignTeams();
-            BalanceTeams();
+            if (controlType == ControlType.Auto)
+            {
+                AssignTeams();
+                BalanceTeams();
+            }
+            
+            
             if (fightOnStart)
             {
                 //DoBattle();
@@ -72,6 +92,7 @@ namespace Final
                 toAdd.team = Character.Team.One;
                 teamOne.Add(toAdd);
                 aCharacters.Remove(toAdd);
+                ss_teamOne[i].AssignCharacter(toAdd);
             }
 
             for (int i = 0; i < 5; i++)
@@ -80,7 +101,29 @@ namespace Final
                 toAdd.team = Character.Team.Two;
                 teamTwo.Add(toAdd);
                 aCharacters.Remove(toAdd);
+                ss_teamTwo[i].AssignCharacter(toAdd);
             }
+        }
+
+        public void AssignTeamsManual ()
+        {
+            if (TeamContainer.teamContainers[0].tempTeam.Count == 0 || TeamContainer.teamContainers[1].tempTeam.Count == 0)
+            {
+                return;
+            }
+            teamOne.Clear();
+            teamTwo.Clear();
+
+            teamOne = new List<Character>(TeamContainer.teamContainers[0].tempTeam);
+            teamTwo = new List<Character>(TeamContainer.teamContainers[1].tempTeam);
+
+            BalanceTeams();
+
+            stageOneCanvas.SetActive(false);
+            stageTwoCanvas.SetActive(true);
+
+
+            print("finished assigning teams");
         }
 
         public void BalanceTeams ()
@@ -134,7 +177,7 @@ namespace Final
             
 
             string result = "";
-            result += "TEAM ONE: " + teamOne.Count + " | TEAM TWO: " + teamTwo.Count + "\n";
+            result += "TEAM ONE: " + teamOne.Count + "\n\n" + "TEAM TWO: " + teamTwo.Count + "\n\n";
             foreach (DamageResult r in roundResults)
             {
                 result += r.aggressor.team + " vs " + r.defender.team + ". DMG: " + r.damage + ".";
