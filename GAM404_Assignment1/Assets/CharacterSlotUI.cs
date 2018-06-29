@@ -8,7 +8,8 @@ namespace Final
 {
     public class CharacterSlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
-        Character myCharacter = null;
+        [HideInInspector]
+        public Character myCharacter = null;
         public Image myImage;
         public Text myText;
 

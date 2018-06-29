@@ -27,10 +27,13 @@ namespace Final
         public Button completeRosterButton;
         public GameObject stageOneCanvas, stageTwoCanvas;
         public CharacterSlotUI[] ss_teamOne, ss_teamTwo;
+        public Text resultText;
+        public Button fightButton;
         private void Awake()
         {
             controller = this;
             completeRosterButton.onClick.AddListener(() => AssignTeamsManual());
+            fightButton.onClick.AddListener(() => CompleteManualBattleRound());
         }
         // Use this for initialization
         void Start()
@@ -43,14 +46,14 @@ namespace Final
                 AssignTeams();
                 BalanceTeams();
             }
-            
-            
+
+
             if (fightOnStart)
             {
                 //DoBattle();
                 DoTournament();
             }
-            
+
         }
 
         // Update is called once per frame
@@ -92,7 +95,7 @@ namespace Final
                 toAdd.team = Character.Team.One;
                 teamOne.Add(toAdd);
                 aCharacters.Remove(toAdd);
-                ss_teamOne[i].AssignCharacter(toAdd);
+                //ss_teamOne[i].AssignCharacter(toAdd);
             }
 
             for (int i = 0; i < 5; i++)
@@ -101,11 +104,11 @@ namespace Final
                 toAdd.team = Character.Team.Two;
                 teamTwo.Add(toAdd);
                 aCharacters.Remove(toAdd);
-                ss_teamTwo[i].AssignCharacter(toAdd);
+                //ss_teamTwo[i].AssignCharacter(toAdd);
             }
         }
 
-        public void AssignTeamsManual ()
+        public void AssignTeamsManual()
         {
             if (TeamContainer.teamContainers[0].tempTeam.Count == 0 || TeamContainer.teamContainers[1].tempTeam.Count == 0)
             {
@@ -122,11 +125,19 @@ namespace Final
             stageOneCanvas.SetActive(false);
             stageTwoCanvas.SetActive(true);
 
+            for (int i = 0; i < ss_teamOne.Length; i++)
+            {
+                ss_teamOne[i].AssignCharacter(teamOne[i]);
+            }
 
+            for (int i = 0; i < ss_teamTwo.Length; i++)
+            {
+                ss_teamTwo[i].AssignCharacter(teamTwo[i]);
+            }
             print("finished assigning teams");
         }
 
-        public void BalanceTeams ()
+        public void BalanceTeams()
         {
             for (int i = 0; i < membersToBalance; i++)
             {
@@ -134,11 +145,11 @@ namespace Final
             }
             //foreach (Character c in teamTwo)
             //{
-                //c.Recalculate(balanceModifier);
+            //c.Recalculate(balanceModifier);
             //}
         }
 
-        public void CompleteBattleRound()
+        public string CompleteBattleRound()
         {
             string win = "";
             List<DamageResult> roundResults = new List<DamageResult>();
@@ -147,7 +158,7 @@ namespace Final
                 if (teamTwo.Count > 0)
                 {
                     Character target = GetTarget(teamTwo, c);
-                    
+
                     roundResults.Add(DamageTarget(target, c, teamTwo));
                 }
                 else
@@ -155,7 +166,7 @@ namespace Final
                     win = "TEAM ONE WINNER";
                     break;
                 }
-                
+
             }
             if (win == "")
             {
@@ -174,13 +185,13 @@ namespace Final
 
                 }
             }
-            
+
 
             string result = "";
             result += "TEAM ONE: " + teamOne.Count + "\n\n" + "TEAM TWO: " + teamTwo.Count + "\n\n";
             foreach (DamageResult r in roundResults)
             {
-                result += r.aggressor.team + " vs " + r.defender.team + ". DMG: " + r.damage + ".";
+                result += "Char " + r.aggressor.ID + " hits " + "Char " + r.defender.ID + ". DMG: " + r.damage + ".";
                 if (r.defenderDead)
                 {
                     result += " Defender killed";
@@ -188,7 +199,42 @@ namespace Final
                 result += "\n";
             }
             result += "\n " + win;
+
+            return result;
             //print(result);
+        }
+
+        public void CompleteManualBattleRound()
+        {
+            string s = CompleteBattleRound();
+            resultText.text = s;
+
+            foreach (CharacterSlotUI ui in ss_teamOne)
+            {
+                if (ui.myCharacter.statistics.health < 0)
+                {
+                    ui.transform.GetChild(0).GetComponent<Image>().color = Color.red;
+                }
+            }
+
+            foreach (CharacterSlotUI ui in ss_teamTwo)
+            {
+                if (ui.myCharacter.statistics.health < 0)
+                {
+                    ui.transform.GetChild(0).GetComponent<Image>().color = Color.red;
+                }
+            }
+
+            if (s.ToLower().Contains("winner"))
+            {
+                fightButton.GetComponentInChildren<Text>().text = "Retry";
+                fightButton.onClick.AddListener(() => RestartLevel());
+            }
+        }
+
+        void RestartLevel ()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
 
         [ContextMenu("Do Battle")]
