@@ -34,6 +34,10 @@ namespace Final
             controller = this;
             completeRosterButton.onClick.AddListener(() => AssignTeamsManual());
             fightButton.onClick.AddListener(() => CompleteManualBattleRound());
+
+            controlType = MenuController.cType;
+            GameObject g = GameObject.FindGameObjectWithTag("menu");
+            Destroy(g);
         }
         // Use this for initialization
         void Start()
@@ -43,17 +47,16 @@ namespace Final
             PopulateRoster();
             if (controlType == ControlType.Auto)
             {
-                AssignTeams();
-                BalanceTeams();
+                StartCoroutine(AutoController());
             }
 
-
+            /*
             if (fightOnStart)
             {
                 //DoBattle();
                 DoTournament();
             }
-
+            */
         }
 
         // Update is called once per frame
@@ -62,6 +65,26 @@ namespace Final
 
         }
 
+        IEnumerator AutoController ()
+        {
+            yield return new WaitForSeconds(1);
+            AssignTeams();
+            BalanceTeams();
+
+            foreach (Character c in teamOne)
+            {
+                TeamContainer.teamContainers[0].AddCharacterToTeam(c);
+            }
+
+            yield return new WaitForSeconds(1);
+
+            foreach (Character c in teamTwo)
+            {
+                TeamContainer.teamContainers[1].AddCharacterToTeam(c);
+            }
+
+            yield break;
+        }
         public void PopulateRoster()
         {
             allCharacters.Clear();

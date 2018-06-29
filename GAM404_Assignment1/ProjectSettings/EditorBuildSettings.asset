@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/RPGStatisticsMenu.unity
+    guid: 89b02792251b5d749b52530d6b5a9c42
+  - enabled: 1
     path: Assets/RPGStatisticsAssignment.unity
     guid: eb5d3ac42ee97fd49a41b2b55975070a
   m_configObjects: {}
