@@ -14,11 +14,16 @@ namespace Final
         //Relevant UI variables
         public Button closeButton;
         public Text ch_NameText, ch_AttType, ch_attributes, ch_statistics;
+
+        public Button sa_lowH, sa_highH, sa_highDPS;
         // Use this for initialization
         void Start()
         {
             //setup button to close panel on click
             closeButton.onClick.AddListener(() => Close());
+            sa_lowH.onClick.AddListener(() => SetAttType(0));
+            sa_highH.onClick.AddListener(() => SetAttType(1));
+            sa_highDPS.onClick.AddListener(() => SetAttType(2));
         }
 
         // Update is called once per frame
@@ -53,6 +58,23 @@ namespace Final
         {
             //... this.
             Destroy(this.gameObject);
+        }
+
+        public void SetAttType (int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    myCharacter.attackType = Character.AttackType.LowestHealth;
+                    break;
+                case 1:
+                    myCharacter.attackType = Character.AttackType.HighestHealth;
+                    break;
+                case 2:
+                    myCharacter.attackType = Character.AttackType.HighestDP;
+                    break;
+            }
+            ch_AttType.text = "Attack Type: " + myCharacter.attackType;
         }
     }
 }
