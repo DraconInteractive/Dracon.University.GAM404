@@ -5,15 +5,19 @@ using UnityEngine.UI;
 
 namespace Final
 {
+    //Desc UI is the window that pops up when you click a character slot
     public class CharacterDescUI : MonoBehaviour
     {
+        //store ref to character. ref, not new var
         [HideInInspector]
         public Character myCharacter;
+        //Relevant UI variables
         public Button closeButton;
         public Text ch_NameText, ch_AttType, ch_attributes, ch_statistics;
         // Use this for initialization
         void Start()
         {
+            //setup button to close panel on click
             closeButton.onClick.AddListener(() => Close());
         }
 
@@ -22,7 +26,8 @@ namespace Final
         {
 
         }
-
+        //Assign the character. 
+        //Create some strings to hold attributes and stats, then assign all to relevant ui elements. 
         public void AssignCharacter (Character ch)
         {
             ch_NameText.text = "Character " + ch.ID;
@@ -46,6 +51,7 @@ namespace Final
 
         void Close ()
         {
+            //... this.
             Destroy(this.gameObject);
         }
     }
