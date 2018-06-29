@@ -6799,6 +6799,9 @@ MonoBehaviour:
   - {fileID: 220006068}
   resultText: {fileID: 1219485406}
   fightButton: {fileID: 316534407}
+  rounderCounter: 1
+  teamOneC: {fileID: 1348506605}
+  teamTwoC: {fileID: 1440533664}
 --- !u!1 &1616990346
 GameObject:
   m_ObjectHideFlags: 0

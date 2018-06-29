@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+//Changelog
+//BUG SOLVED! Bug free boiiiiii's
 namespace Final
 {
     //Main controller for the game, all the fun stuff. 
